@@ -67,7 +67,7 @@ describe('Feature : Change seats', () => {
     });
 });
 
-      describe('Scenario: webinar does not exist', () => {
+      describe('Scenario: Not the right webinar', () => {
         const payload = {
         user: testUser.bob,
           webinarId: 'webinar-id',
