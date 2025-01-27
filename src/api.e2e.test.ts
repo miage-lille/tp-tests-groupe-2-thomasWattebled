@@ -73,13 +73,12 @@ describe('Webinar Routes E2E', () => {
 
         // ASSERT
         expect(response.body).toEqual({
-            error: 'WebinarNotFoundExceptionw', 
-            message: `Webinar not found`,
+            "error": "Webinar not found",
           });
         });
 
 
-    it('should not found the webinar', async () => {
+    it('should not modify the webinar', async () => {
             // ARRANGE
         const prisma = fixture.getPrismaClient();
         const server = fixture.getServer();
@@ -91,20 +90,19 @@ describe('Webinar Routes E2E', () => {
             seats: 10,
             startDate: new Date(),
             endDate: new Date(),
-            organizerId: 'test-user',
+            organizerId: 'user',
         },
         });
     
         // ACT
         const response = await supertest(server)
-        .post(`/webinars/${falseId}/seats`)
+        .post(`/webinars/${webinar.id}/seats`)
         .send({ seats: '30', organizerId: 'notOrganizer' })
-        .expect(404);
+        .expect(401);
 
         // ASSERT
         expect(response.body).toEqual({
-            error: 'WebinarNotOrganizerException', 
-            message: `'User is not allowed to update this webinar',`,
+            "error": "User is not allowed to update this webinar",
           });
         });
 

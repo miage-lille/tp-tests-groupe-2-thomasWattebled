@@ -78,15 +78,8 @@ describe('PrismaWebinarRepository', () => {
       await repository.create(webinar);
   
       // ASSERT
-      const maybeWebinar = repository.findById('webinar-id')
-      expect(maybeWebinar).toEqual({
-        id: 'webinar-id',
-        organizerId: 'organizer-id',
-        title: 'Webinar title',
-        startDate: new Date('2022-01-01T00:00:00Z'),
-        endDate: new Date('2022-01-01T01:00:00Z'),
-        seats: 100,
-      });
+      const maybeWebinar = await repository.findById('webinar-id')
+      expect(maybeWebinar).toEqual(webinar);
     });
   });
 
@@ -115,8 +108,11 @@ describe('PrismaWebinarRepository', () => {
       await repository.create(webinar);
   
       // ASSERT
-      const newWebinar = repository.update(webinarUpdate)
-      expect(newWebinar).toEqual({
+      await repository.update(webinarUpdate)
+      const maybeWebinar = await fixture.getPrismaClient().webinar.findUnique({
+        where: { id: 'webinar-id' },
+      });
+      expect(maybeWebinar).toEqual({
         id: 'webinar-id',
         organizerId: 'organizer-id',
         title: 'Webinar title',
